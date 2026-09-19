@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["node"],
+    "paths": {
+      "system1": ["./packages/system1/src/index.ts"],
+      "system1/*": ["./packages/system1/src/*"]
+    }
+  },
+  "include": ["packages/**/*.ts", "examples/**/*.ts", "vite.config.ts"]
+}

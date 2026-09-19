@@ -1,0 +1,23 @@
+{
+  "name": "system1-workspace",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.4.2",
+  "engines": { "node": ">=22.18.0" },
+  "scripts": {
+    "build": "pnpm --filter system1 build",
+    "test": "vp test run",
+    "typecheck": "tsc --noEmit",
+    "check": "vp check",
+    "format": "vp fmt",
+    "verify": "pnpm check && pnpm typecheck && pnpm test && pnpm build && pnpm smoke",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "devDependencies": {
+    "@effect/platform": "0.97.2",
+    "@types/node": "^22.19.0",
+    "effect": "3.22.2",
+    "typescript": "~5.9.3",
+    "vite-plus": "0.3.3"
+  }
+}
