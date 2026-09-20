@@ -17,5 +17,5 @@
       "system1/*": ["./packages/system1/src/*"]
     }
   },
-  "include": ["packages/**/*.ts", "examples/**/*.ts", "vite.config.ts"]
+  "include": ["packages/**/*.ts", "examples/**/*.ts", "docs/**/*.ts", "vite.config.ts"]
 }
