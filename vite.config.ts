@@ -5,5 +5,5 @@ export default defineConfig({
     include: ["packages/**/*.test.ts"],
   },
   lint: { ignorePatterns: ["**/dist/**"] },
-  fmt: { ignorePatterns: ["**/dist/**", "pnpm-lock.yaml"] },
+  fmt: { ignorePatterns: ["**/dist/**", "pnpm-lock.yaml", "CHANGELOG.md"] },
 });
