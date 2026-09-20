@@ -7,6 +7,7 @@ export default defineConfig({
       "src/core.ts",
       "src/adapter.ts",
       "src/effect.ts",
+      "src/testing.ts",
       "src/adapters/typesafe.ts",
       "src/adapters/cloudflare.ts",
       "src/adapters/laya.ts",

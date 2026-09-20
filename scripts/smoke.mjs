@@ -37,6 +37,7 @@ import { defineAdapter, checkHttp } from "system-one/adapter";
 import { jev } from "system-one/adapters/typesafe";
 import { cloudflare } from "system-one/adapters/cloudflare";
 import { laya } from "system-one/adapters/laya";
+import { stubModel } from "system-one/testing";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 let effectPresent = true;
@@ -49,6 +50,9 @@ const fixture = defineAdapter({ id: "fixture", model: "fixture", capabilities: {
 const client = createClient({ model: fixture, fetch: async () => Response.json({}) });
 const result = await client.evaluate({ state: snapshot({ text: "hello" }), questions });
 if (result.answers.ok.probabilityTrue !== 0.75) throw new Error("unexpected answer");
+const stub = stubModel({ answers: { ok: { kind: "boolean", probabilityTrue: 0.5 } } });
+const stubbed = await createClient({ model: stub }).evaluate({ state: "x", questions });
+if (stubbed.answers.ok.probabilityTrue !== 0.5 || stub.calls.length !== 1) throw new Error("stub failed");
 for (const make of [() => jev({ apiKey: "k" }), () => cloudflare({ accountId: "a".repeat(32), apiToken: "t" }), () => laya({ endpoint: "http://localhost:1/x", model: "m" })]) make();
 if (!(new System1Error("ProviderError", "x") instanceof Error)) throw new Error("bad error class");
 console.log("smoke: promise API ok without effect");

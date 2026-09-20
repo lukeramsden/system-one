@@ -47,6 +47,10 @@
       "types": "./dist/effect.d.mts",
       "import": "./dist/effect.mjs"
     },
+    "./testing": {
+      "types": "./dist/testing.d.mts",
+      "default": "./dist/testing.mjs"
+    },
     "./adapters/typesafe": {
       "types": "./dist/adapters/typesafe.d.mts",
       "import": "./dist/adapters/typesafe.mjs"
