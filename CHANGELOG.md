@@ -4,6 +4,8 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-19
+
 ### Changed
 
 - Consumer-focused README; maintainer material moved to `CONTRIBUTING.md`.
@@ -29,4 +31,7 @@ Initial release, published as `system-one` (npm rejected `system1` as too simila
 - Tagged `System1Error` with a closed `_tag` union; no secrets in messages or details.
 
 [Unreleased]: https://github.com/lukeramsden/system-one/compare/v0.1.0...HEAD
+[0.1.1]: https://github.com/lukeramsden/system-one/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/lukeramsden/system-one/releases/tag/v0.1.0
+
+[Unreleased]: https://github.com/lukeramsden/system-one/compare/v0.1.1...master

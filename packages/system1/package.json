@@ -1,6 +1,6 @@
 {
   "name": "system-one",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Typed decisions across System-1 models, with Promise and Effect-native clients",
   "keywords": [
     "decision-model",
