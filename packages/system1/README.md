@@ -153,15 +153,17 @@ pnpm verify        # check + typecheck + test + build + example + smoke
 
 ### Publishing
 
-Not automated. From a clean `master` with `pnpm verify` green:
+Releases are tag-driven via [`.github/workflows/publish.yml`](.github/workflows/publish.yml). From a clean, green `master`:
 
 ```
-cd packages/system1
-pnpm version <patch|minor|major>   # bumps version, creates tag
-pnpm publish --access public       # runs `prepack` → vp pack
+# 1. bump packages/system1/package.json version and add a CHANGELOG.md entry, commit
+# 2. tag with the same semver, prefixed v
+git tag v0.1.0 && git push origin master v0.1.0
 ```
 
-Then update `CHANGELOG.md` and push the tag.
+The workflow checks the tag matches `package.json`, runs `pnpm verify`, publishes `system-one` to npm with provenance (pre-release tags → `next` dist-tag), and creates a GitHub Release from the matching CHANGELOG section.
+
+Auth is npm **trusted publishing** (OIDC; configure the repo/workflow as a trusted publisher on npmjs.com), or a repository secret `NPM_TOKEN` as fallback.
 
 ### Live checks
 

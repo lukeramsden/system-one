@@ -1,0 +1,84 @@
+# Publishes packages/system1 to npm as `system-one` and creates a GitHub Release.
+#
+# Trigger: push a semver tag, e.g. `git tag v0.1.0 && git push origin v0.1.0`.
+# The tag must equal packages/system1/package.json `version` (prefixed with `v`).
+# Pre-release tags (v1.2.0-beta.1) publish under the `next` dist-tag.
+#
+# Auth: npm trusted publishing (OIDC) — configure on npmjs.com under the package's
+# Settings → Trusted Publisher: repo lukeramsden/system1, workflow publish.yml.
+# Fallback: set repository secret NPM_TOKEN (granular, "bypass 2FA" enabled).
+name: Publish
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write # create the GitHub Release
+  id-token: write # npm provenance + trusted publishing
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+
+      - name: Ensure npm supports trusted publishing
+        run: npm install -g npm@latest && npm --version
+
+      - name: Check tag matches package version
+        id: version
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG="$(node -p "require('./packages/system1/package.json').version")"
+          if [ "$TAG" != "$PKG" ]; then
+            echo "::error::tag v$TAG does not match package.json version $PKG"; exit 1
+          fi
+          if [[ "$TAG" =~ - ]]; then echo "dist_tag=next" >> "$GITHUB_OUTPUT"; else echo "dist_tag=latest" >> "$GITHUB_OUTPUT"; fi
+          echo "version=$TAG" >> "$GITHUB_OUTPUT"
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm verify
+
+      - name: Publish to npm
+        working-directory: packages/system1
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: pnpm publish --access public --no-git-checks --provenance --tag "${{ steps.version.outputs.dist_tag }}"
+
+      - name: Extract changelog section
+        id: notes
+        run: |
+          set -euo pipefail
+          V="${{ steps.version.outputs.version }}"
+          awk -v v="$V" '
+            /^## / { if (found) exit; if (index($0, "## " v) == 1) { found=1; next } }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+          if [ ! -s release-notes.md ]; then echo "No CHANGELOG entry for $V" > release-notes.md; fi
+          cat release-notes.md
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "system-one ${{ steps.version.outputs.version }}" \
+            --notes-file release-notes.md \
+            ${{ steps.version.outputs.dist_tag == 'next' && '--prerelease' || '' }} \
+            --verify-tag
