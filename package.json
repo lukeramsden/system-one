@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "pnpm --filter system1 build",
+    "build": "pnpm --filter system-one build",
     "test": "vp test run",
     "typecheck": "tsc --noEmit",
     "check": "vp check",

@@ -8,7 +8,7 @@ Laya (`convaiinnovations/laya`, Apache-2.0) is a non-autoregressive decision mod
 
 ## Decision
 
-Ship `laya()` in `system1/adapters/laya` as an adapter for a **bridge you run yourself**, named `system1-laya-v1`:
+Ship `laya()` in `system-one/adapters/laya` as an adapter for a **bridge you run yourself**, named `system1-laya-v1`:
 
 - Request: `POST <endpoint>` with JSON `{ protocol: "system1-laya-v1", model, state, questions }`, where `questions` uses the TypeSafe-style wire encoding (`noul`/`choice`/`score`, `criteria`). Optional `Authorization: Bearer` if `apiKey` is configured.
 - Response: the object returned by `laya`'s `predict()` — `{ answers: { <key>: {...} }, model?, usage? }`. Decoded by the shared typed-decisions codec; `confidence.definition` is `laya:reported-confidence` (Laya derives it differently from TypeSafe; the model card notes it ships over-confident until temperature-refit).

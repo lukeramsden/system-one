@@ -8,7 +8,7 @@ Two execution runtimes (Promise, Effect) must share every provider mapping, or p
 
 ## Decision
 
-### `ModelProtocol` (public at `system1/adapter`)
+### `ModelProtocol` (public at `system-one/adapter`)
 
 ```
 id, model, capabilities
@@ -26,12 +26,12 @@ Helpers: `checkHttp` (status→tag, honours `retry-after`), `endpoint` (HTTPS on
 
 ### Runtimes
 
-- `system1` (Promise): `createClient({ model, fetch? })`. One attempt, `redirect: "error"`, `AbortSignal` and `timeoutMs` combined with `AbortSignal.any`. Pre-aborted signals never reach `fetch`. Transport exceptions are replaced with a sanitised `TransportError`; the caller's abort reason is re-thrown as-is. No Effect import anywhere in this path.
-- `system1/effect`: `System1` is a `Context.Tag`; `layer(model)` requires `HttpClient.HttpClient` so tests and platforms inject transport. Evaluation is lazy, interruption propagates to the HTTP request, operational failures are `System1Error` in the error channel, adapter bugs die as defects, and a span `system1.evaluate` carries adapter/model attributes. No `Effect.runPromise` inside the library. `testLayer` still runs `prepare` and `validateResult`, so fixtures cannot make invalid shapes look typed.
+- `system-one` (Promise): `createClient({ model, fetch? })`. One attempt, `redirect: "error"`, `AbortSignal` and `timeoutMs` combined with `AbortSignal.any`. Pre-aborted signals never reach `fetch`. Transport exceptions are replaced with a sanitised `TransportError`; the caller's abort reason is re-thrown as-is. No Effect import anywhere in this path.
+- `system-one/effect`: `System1` is a `Context.Tag`; `layer(model)` requires `HttpClient.HttpClient` so tests and platforms inject transport. Evaluation is lazy, interruption propagates to the HTTP request, operational failures are `System1Error` in the error channel, adapter bugs die as defects, and a span `system1.evaluate` carries adapter/model attributes. No `Effect.runPromise` inside the library. `testLayer` still runs `prepare` and `validateResult`, so fixtures cannot make invalid shapes look typed.
 
 ### Packaging
 
-One published package, `system1`, ESM only, Node ≥22.18. Subpaths: `.`, `core`, `adapter`, `effect`, `adapters/typesafe`, `adapters/cloudflare`, `adapters/laya`. `effect` and `@effect/platform` are optional peers, externalised by `vp pack`. A smoke script proves the non-effect entry points load with Effect absent.
+One published package, `system-one`, ESM only, Node ≥22.18. Subpaths: `.`, `core`, `adapter`, `effect`, `adapters/typesafe`, `adapters/cloudflare`, `adapters/laya`. `effect` and `@effect/platform` are optional peers, externalised by `vp pack`. A smoke script proves the non-effect entry points load with Effect absent.
 
 ## Consequences
 

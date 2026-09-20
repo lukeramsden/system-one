@@ -8,7 +8,7 @@ Applications need typed decision questions, not another chat API. Models differ 
 
 ## Decision
 
-Publish one ESM package, `system1`, with root Promise API, `core`, `adapter`, provider adapter subpaths, and an optional `effect` subpath. Use a pnpm workspace containing the library and a private, executable example workspace. VitePlus owns packing, tests, lint, and formatting; TypeScript also checks strict source and example types. Target Node 22.18+.
+Publish one ESM package, `system-one`, with root Promise API, `core`, `adapter`, provider adapter subpaths, and an optional `effect` subpath. Use a pnpm workspace containing the library and a private, executable example workspace. VitePlus owns packing, tests, lint, and formatting; TypeScript also checks strict source and example types. Target Node 22.18+.
 
 This replaces the draft's many public package names. A single release keeps shared protocol and runtime versions aligned. The monorepo remains useful for testing the consumer boundary and compiling documentation examples.
 

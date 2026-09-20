@@ -1,6 +1,6 @@
 # Answer semantics
 
-`system1` normalises the _structure_ of model output, never its _certainty_. This page explains exactly what each field means and what the library refuses to invent. Snippets are compiled from [`docs/snippets.ts`](./snippets.ts).
+`system-one` normalises the _structure_ of model output, never its _certainty_. This page explains exactly what each field means and what the library refuses to invent. Snippets are compiled from [`docs/snippets.ts`](./snippets.ts).
 
 ## Question kinds
 
@@ -70,7 +70,7 @@ type OrdinalAnswer = {
 Need an argmax or an expectation from a distribution? Do it explicitly:
 
 ```ts
-import { expectedIndex } from "system1";
+import { expectedIndex } from "system-one";
 const e = expectedIndex([0.05, 0.8, 0.15]); // 1.1 — derived by you, not reported by the model
 ```
 

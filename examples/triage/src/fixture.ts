@@ -1,5 +1,5 @@
-import { defineAdapter } from "system1/adapter";
-import type { ModelProtocol } from "system1/adapter";
+import { defineAdapter } from "system-one/adapter";
+import type { ModelProtocol } from "system-one/adapter";
 
 /** In-memory stand-in for a real model. Replace with jev(), cloudflare(), or laya(). */
 export const fixtureModel: ModelProtocol = defineAdapter({

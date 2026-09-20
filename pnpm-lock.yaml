@@ -190,7 +190,7 @@ importers:
       effect:
         specifier: 3.22.2
         version: 3.22.2
-      system1:
+      system-one:
         specifier: workspace:*
         version: link:../../packages/system1
 

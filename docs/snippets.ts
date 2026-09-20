@@ -1,9 +1,9 @@
 // Compiled by `pnpm typecheck`. Every snippet in docs/*.md is mirrored here so it cannot drift.
-import { Question, defineQuestions, createClient, expectedIndex, System1Error } from "system1";
-import type { EvaluationResult } from "system1";
-import { defineAdapter, checkHttp, endpoint, bearer, record } from "system1/adapter";
-import type { ModelProtocol, PreparedRequest, ReceivedResponse } from "system1/adapter";
-import type { EvaluationRequest, DecodedEvaluation, Capabilities } from "system1/core";
+import { Question, defineQuestions, createClient, expectedIndex, System1Error } from "system-one";
+import type { EvaluationResult } from "system-one";
+import { defineAdapter, checkHttp, endpoint, bearer, record } from "system-one/adapter";
+import type { ModelProtocol, PreparedRequest, ReceivedResponse } from "system-one/adapter";
+import type { EvaluationRequest, DecodedEvaluation, Capabilities } from "system-one/core";
 
 // --- semantics.md: question kinds ---
 export const triage = defineQuestions({

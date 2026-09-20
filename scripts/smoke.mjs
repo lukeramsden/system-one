@@ -1,4 +1,4 @@
-// Packs system1 and exercises it from a fresh consumer: first without Effect, then with it.
+// Packs system-one and exercises it from a fresh consumer: first without Effect, then with it.
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, writeFileSync, readdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -31,12 +31,12 @@ try {
   writeFileSync(
     join(consumer, "without-effect.mjs"),
     `
-import { createClient, Question, defineQuestions, System1Error } from "system1";
-import { snapshot } from "system1/core";
-import { defineAdapter, checkHttp } from "system1/adapter";
-import { jev } from "system1/adapters/typesafe";
-import { cloudflare } from "system1/adapters/cloudflare";
-import { laya } from "system1/adapters/laya";
+import { createClient, Question, defineQuestions, System1Error } from "system-one";
+import { snapshot } from "system-one/core";
+import { defineAdapter, checkHttp } from "system-one/adapter";
+import { jev } from "system-one/adapters/typesafe";
+import { cloudflare } from "system-one/adapters/cloudflare";
+import { laya } from "system-one/adapters/laya";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 let effectPresent = true;
@@ -72,8 +72,8 @@ console.log("smoke: promise API ok without effect");
     join(consumer, "with-effect.mjs"),
     `
 import { Effect } from "effect";
-import { System1, testLayer } from "system1/effect";
-import { Question } from "system1";
+import { System1, testLayer } from "system-one/effect";
+import { Question } from "system-one";
 const questions = { ok: Question.boolean({ instructions: "Is it ok?" }) };
 const layer = testLayer({ capabilities: { kinds: { boolean: { probabilities: true, confidence: false } }, state: "json", descriptions: "json" }, evaluate: () => ({ answers: { ok: { kind: "boolean", probabilityTrue: 0.25 } } }) });
 const program = Effect.gen(function* () { return yield* (yield* System1).evaluate({ state: "s", questions }); });

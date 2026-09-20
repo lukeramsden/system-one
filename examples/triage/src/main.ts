@@ -1,7 +1,7 @@
 import { Effect } from "effect";
 import { FetchHttpClient } from "@effect/platform";
-import { createClient } from "system1";
-import { System1, layer } from "system1/effect";
+import { createClient } from "system-one";
+import { System1, layer } from "system-one/effect";
 import { fixtureModel, offlineFetch } from "./fixture.ts";
 import { ticket, triage } from "./questions.ts";
 

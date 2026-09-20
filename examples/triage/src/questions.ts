@@ -1,4 +1,4 @@
-import { Question, defineQuestions } from "system1";
+import { Question, defineQuestions } from "system-one";
 
 /** One definition, reused by both the Promise and Effect flows. */
 export const triage = defineQuestions({

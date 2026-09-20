@@ -1,12 +1,12 @@
-# system1
+# system-one
 
 Typed decisions from System-1-style models — TypeSafe **Jev** (directly or via **Cloudflare AI Gateway**) and **Laya** (via a bridge you run) — with a plain Promise client and an **Effect-native** service that share one set of question definitions.
 
-`system1` is a decision API, not a chat SDK. You send **state** and **typed questions**; you get back **typed answers with probabilities**; your code decides what to do. The library never invents a probability, a threshold, a selected level, or a model version it was not given.
+`system-one` is a decision API, not a chat SDK. You send **state** and **typed questions**; you get back **typed answers with probabilities**; your code decides what to do. The library never invents a probability, a threshold, a selected level, or a model version it was not given.
 
 ```
-pnpm add system1                       # Promise API, zero runtime deps
-pnpm add effect @effect/platform       # optional, only for system1/effect
+pnpm add system-one                       # Promise API, zero runtime deps
+pnpm add effect @effect/platform       # optional, only for system-one/effect
 ```
 
 Node ≥ 22.18, ESM only.
@@ -14,7 +14,7 @@ Node ≥ 22.18, ESM only.
 ## Define questions once
 
 ```ts
-import { Question, defineQuestions } from "system1";
+import { Question, defineQuestions } from "system-one";
 
 const triage = defineQuestions({
   urgent: Question.boolean({
@@ -41,8 +41,8 @@ Definitions are validated, deep-copied, and frozen. Literal keys are preserved: 
 ## Promise API
 
 ```ts
-import { createClient } from "system1";
-import { jev } from "system1/adapters/typesafe";
+import { createClient } from "system-one";
+import { jev } from "system-one/adapters/typesafe";
 
 const client = createClient({
   model: jev({ apiKey: process.env.TYPESAFE_API_KEY!, model: "jev-1.13.0" }),
@@ -81,8 +81,8 @@ One attempt per `evaluate`, no hidden retries, redirects refused. Cancellation v
 ```ts
 import { Effect } from "effect";
 import { FetchHttpClient } from "@effect/platform";
-import { System1, layer } from "system1/effect";
-import { jev } from "system1/adapters/typesafe";
+import { System1, layer } from "system-one/effect";
+import { jev } from "system-one/adapters/typesafe";
 
 const program = Effect.gen(function* () {
   const system1 = yield* System1;
@@ -104,11 +104,11 @@ Swap the model by swapping the layer; the program does not change.
 
 ## Adapters
 
-| Import                        | Constructor                                                               | Notes                                                                                                                                                                                                                                                                                                            |
-| ----------------------------- | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `system1/adapters/typesafe`   | `jev({ apiKey, model?: "jev-latest", endpoint? })`                        | Direct `POST https://api.typesafe.ai/v1/systemone`. Confidence definition `typesafe:distribution-confidence`.                                                                                                                                                                                                    |
-| `system1/adapters/cloudflare` | `cloudflare({ accountId, apiToken, gatewayId?, model?: "typesafe/jev" })` | Universal `POST …/ai/run` envelope; `gatewayId` → `cf-aig-gateway-id`. Token needs **Workers AI** permission. Classifies code `2021` (no credits/BYOK) as `QuotaExceeded`. **Routing verified; a funded success response has not been observed yet** — see [specs](specs/2026-09-19-cloudflare-route-status.md). |
-| `system1/adapters/laya`       | `laya({ endpoint, model, apiKey? })`                                      | Talks to **your own bridge** speaking the `system1-laya-v1` contract around `laya.predict()`. There is no public Laya HTTP API — see [specs](specs/2026-09-19-laya-bridge-contract.md).                                                                                                                          |
+| Import                           | Constructor                                                               | Notes                                                                                                                                                                                                                                                                                                            |
+| -------------------------------- | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `system-one/adapters/typesafe`   | `jev({ apiKey, model?: "jev-latest", endpoint? })`                        | Direct `POST https://api.typesafe.ai/v1/systemone`. Confidence definition `typesafe:distribution-confidence`.                                                                                                                                                                                                    |
+| `system-one/adapters/cloudflare` | `cloudflare({ accountId, apiToken, gatewayId?, model?: "typesafe/jev" })` | Universal `POST …/ai/run` envelope; `gatewayId` → `cf-aig-gateway-id`. Token needs **Workers AI** permission. Classifies code `2021` (no credits/BYOK) as `QuotaExceeded`. **Routing verified; a funded success response has not been observed yet** — see [specs](specs/2026-09-19-cloudflare-route-status.md). |
+| `system-one/adapters/laya`       | `laya({ endpoint, model, apiKey? })`                                      | Talks to **your own bridge** speaking the `system1-laya-v1` contract around `laya.predict()`. There is no public Laya HTTP API — see [specs](specs/2026-09-19-laya-bridge-contract.md).                                                                                                                          |
 
 All endpoints must be HTTPS (HTTP allowed on loopback only). Credentials live in closures; `JSON.stringify(adapter)` never contains them.
 

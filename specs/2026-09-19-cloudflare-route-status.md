@@ -19,7 +19,7 @@ Cloudflare lists `typesafe/jev` as a third-party model in its catalog and expose
 
 ## Decision
 
-Ship `cloudflare({ accountId, apiToken, gatewayId?, model? })` in `system1/adapters/cloudflare`:
+Ship `cloudflare({ accountId, apiToken, gatewayId?, model? })` in `system-one/adapters/cloudflare`:
 
 - `accountId` must be 32 hex chars; `gatewayId` (optional, sent as `cf-aig-gateway-id`) must match `[A-Za-z0-9_-]+`.
 - Only `typesafe/jev` is accepted for `model`; other catalog models have different semantics and need their own adapters.

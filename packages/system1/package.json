@@ -1,5 +1,5 @@
 {
-  "name": "system1",
+  "name": "system-one",
   "version": "0.1.0",
   "description": "Typed decisions across System-1 models, with Promise and Effect-native clients",
   "keywords": [
@@ -7,7 +7,7 @@
     "effect",
     "jev",
     "laya",
-    "system1",
+    "system-one",
     "typesafe",
     "typescript"
   ],

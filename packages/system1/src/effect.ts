@@ -17,7 +17,7 @@ export interface System1Service {
     request: EvaluationRequest<Q, R>,
   ) => Effect.Effect<EvaluationResult<Q, R>, System1Error>;
 }
-export class System1 extends Context.Tag("system1/System1")<System1, System1Service>() {}
+export class System1 extends Context.Tag("system-one/System1")<System1, System1Service>() {}
 
 /** Only documented operational failures enter the error channel. Bugs remain defects. */
 function attempt<A>(thunk: () => A): Effect.Effect<A, System1Error> {

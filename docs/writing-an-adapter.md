@@ -1,15 +1,15 @@
 # Writing an adapter
 
-An adapter teaches `system1` how to talk to one model over one HTTP request. It is a plain object implementing `ModelProtocol` from `system1/adapter`. It does **no I/O** — the Promise client and the Effect layer own transport, cancellation, and timeouts, and both run the same core validation after your `decode`.
+An adapter teaches `system-one` how to talk to one model over one HTTP request. It is a plain object implementing `ModelProtocol` from `system-one/adapter`. It does **no I/O** — the Promise client and the Effect layer own transport, cancellation, and timeouts, and both run the same core validation after your `decode`.
 
 Every snippet below is compiled from [`docs/snippets.ts`](./snippets.ts) so it cannot drift from the API.
 
 ## The shape
 
 ```ts
-import { defineAdapter, checkHttp, endpoint, bearer, record } from "system1/adapter";
-import type { ModelProtocol, PreparedRequest, ReceivedResponse } from "system1/adapter";
-import type { EvaluationRequest, DecodedEvaluation, Capabilities } from "system1/core";
+import { defineAdapter, checkHttp, endpoint, bearer, record } from "system-one/adapter";
+import type { ModelProtocol, PreparedRequest, ReceivedResponse } from "system-one/adapter";
+import type { EvaluationRequest, DecodedEvaluation, Capabilities } from "system-one/core";
 ```
 
 | Member                      | Purpose                                                                                              |
@@ -108,6 +108,6 @@ Copy the pattern in [`packages/system1/src/adapters.test.ts`](../packages/system
 4. Correct tags for documented provider error codes and for 401/402/413/422/429/5xx.
 5. `resolvedModel` and `usage` preserved when present, absent otherwise.
 6. No secret in `JSON.stringify(adapter)` or in any error message.
-7. Identical results through `system1/effect`'s `layer(adapter)` with an injected `FetchHttpClient.Fetch`.
+7. Identical results through `system-one/effect`'s `layer(adapter)` with an injected `FetchHttpClient.Fetch`.
 
 Add a dated record under `specs/` describing the provider contract you verified and what you could not verify (see `2026-09-19-cloudflare-route-status.md` for the format).

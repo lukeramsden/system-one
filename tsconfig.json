@@ -13,8 +13,8 @@
     "allowImportingTsExtensions": true,
     "types": ["node"],
     "paths": {
-      "system1": ["./packages/system1/src/index.ts"],
-      "system1/*": ["./packages/system1/src/*"]
+      "system-one": ["./packages/system1/src/index.ts"],
+      "system-one/*": ["./packages/system1/src/*"]
     }
   },
   "include": ["packages/**/*.ts", "examples/**/*.ts", "docs/**/*.ts", "vite.config.ts"]
