@@ -1,30 +1,23 @@
 import { Effect } from "effect";
-import { FetchHttpClient } from "@effect/platform";
 import { createClient } from "system-one";
 import { System1, layer } from "system-one/effect";
-import { fixtureModel, offlineFetch } from "./fixture.ts";
+import { fixtureModel } from "./fixture.ts";
 import { ticket, triage } from "./questions.ts";
 
 // Promise API
-const client = createClient({ model: fixtureModel, fetch: offlineFetch });
+const client = createClient({ model: fixtureModel });
 const viaPromise = await client.evaluate({
   state: ticket,
   questions: triage,
   requirements: { probabilities: "required" },
 });
 
-// Effect API — same definitions, injected HTTP client
+// Effect API — same definitions; a local model needs no HttpClient
 const program = Effect.gen(function* () {
   const system1 = yield* System1;
   return yield* system1.evaluate({ state: ticket, questions: triage });
 });
-const viaEffect = await Effect.runPromise(
-  program.pipe(
-    Effect.provide(layer(fixtureModel)),
-    Effect.provide(FetchHttpClient.layer),
-    Effect.provideService(FetchHttpClient.Fetch, offlineFetch),
-  ),
-);
+const viaEffect = await Effect.runPromise(program.pipe(Effect.provide(layer(fixtureModel))));
 
 for (const [label, result] of [
   ["promise", viaPromise],
