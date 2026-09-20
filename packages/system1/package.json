@@ -11,20 +11,21 @@
     "typesafe",
     "typescript"
   ],
-  "homepage": "https://github.com/lukeramsden/system1#readme",
+  "homepage": "https://github.com/lukeramsden/system-one#readme",
   "bugs": {
-    "url": "https://github.com/lukeramsden/system1/issues"
+    "url": "https://github.com/lukeramsden/system-one/issues"
   },
   "license": "MIT",
   "author": "Luke Ramsden",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lukeramsden/system1.git",
+    "url": "git+https://github.com/lukeramsden/system-one.git",
     "directory": "packages/system1"
   },
   "files": [
     "dist",
     "README.md",
+    "CONTRIBUTING.md",
     "LICENSE"
   ],
   "type": "module",
@@ -65,7 +66,7 @@
   },
   "scripts": {
     "build": "vp pack",
-    "prepack": "vp pack && cp ../../README.md README.md"
+    "prepack": "vp pack && cp ../../README.md README.md && cp ../../CONTRIBUTING.md CONTRIBUTING.md"
   },
   "peerDependencies": {
     "@effect/platform": "^0.97.2",
