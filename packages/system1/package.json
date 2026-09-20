@@ -2,6 +2,19 @@
   "name": "system1",
   "version": "0.1.0",
   "description": "Typed decisions across System-1 models, with Promise and Effect-native clients",
+  "keywords": [
+    "decision-model",
+    "effect",
+    "jev",
+    "laya",
+    "system1",
+    "typesafe",
+    "typescript"
+  ],
+  "homepage": "https://github.com/lukeramsden/system1#readme",
+  "bugs": {
+    "url": "https://github.com/lukeramsden/system1/issues"
+  },
   "license": "MIT",
   "author": "Luke Ramsden",
   "repository": {
@@ -9,20 +22,13 @@
     "url": "git+https://github.com/lukeramsden/system1.git",
     "directory": "packages/system1"
   },
-  "homepage": "https://github.com/lukeramsden/system1#readme",
-  "bugs": {
-    "url": "https://github.com/lukeramsden/system1/issues"
-  },
-  "type": "module",
-  "sideEffects": false,
-  "engines": {
-    "node": ">=22.18.0"
-  },
   "files": [
     "dist",
     "README.md",
     "LICENSE"
   ],
+  "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
@@ -54,6 +60,9 @@
     },
     "./package.json": "./package.json"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "vp pack",
     "prepack": "vp pack"
@@ -70,16 +79,7 @@
       "optional": true
     }
   },
-  "publishConfig": {
-    "access": "public"
-  },
-  "keywords": [
-    "decision-model",
-    "effect",
-    "jev",
-    "laya",
-    "system1",
-    "typesafe",
-    "typescript"
-  ]
+  "engines": {
+    "node": ">=22.18.0"
+  }
 }
