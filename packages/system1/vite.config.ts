@@ -15,6 +15,6 @@ export default defineConfig({
     dts: true,
     sourcemap: true,
     clean: true,
-    external: ["effect", /^effect\//, "@effect/platform", /^@effect\/platform\//],
+    deps: { neverBundle: ["effect", /^effect\//, "@effect/platform", /^@effect\/platform\//] },
   },
 });
