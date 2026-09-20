@@ -21,12 +21,15 @@ Tests are offline. Live inference against TypeSafe (needs `TYPESAFE_API_KEY`) an
 
 ## Release
 
-Tag-driven via `.github/workflows/publish.yml`:
+Record changes under `## [Unreleased]` in `CHANGELOG.md` as you go. To release, from a clean `master`:
 
-1. Bump `packages/system1/package.json` version and add a `CHANGELOG.md` entry; commit to `master`.
-2. `git tag vX.Y.Z && git push origin master vX.Y.Z`
+```
+pnpm release patch   # or minor / major
+```
 
-The workflow checks the tag matches `package.json`, runs `pnpm verify`, publishes to npm with provenance (pre-release tags → `next` dist-tag), and creates a GitHub Release from the CHANGELOG section.
+`release-it` runs `pnpm verify`, promotes `Unreleased` to a dated version section, bumps both `package.json` files, commits, tags `vX.Y.Z`, and pushes. Then `.github/workflows/publish.yml` takes over:
+
+it checks the tag matches `package.json`, runs `pnpm verify`, publishes to npm with provenance (pre-release tags → `next` dist-tag), and creates a GitHub Release from the CHANGELOG section.
 
 Auth: npm trusted publishing (repo `lukeramsden/system-one`, workflow `publish.yml`, environment `npm`), or repository secret `NPM_TOKEN` as fallback.
 

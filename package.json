@@ -1,5 +1,6 @@
 {
   "name": "system1-workspace",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,12 +11,15 @@
     "format": "vp fmt",
     "verify": "pnpm check && pnpm typecheck && pnpm test && pnpm build && pnpm example && pnpm smoke",
     "smoke": "node scripts/smoke.mjs",
-    "example": "pnpm -F triage-example start"
+    "example": "pnpm -F triage-example start",
+    "release": "release-it"
   },
   "devDependencies": {
     "@effect/platform": "0.97.2",
+    "@release-it/keep-a-changelog": "8.0.1",
     "@types/node": "^22.19.0",
     "effect": "3.22.2",
+    "release-it": "21.1.0",
     "typescript": "~5.9.3",
     "vite-plus": "0.3.3"
   },

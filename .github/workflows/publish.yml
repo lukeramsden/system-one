@@ -1,6 +1,6 @@
 # Publishes packages/system1 to npm as `system-one` and creates a GitHub Release.
 #
-# Trigger: push a semver tag, e.g. `git tag v0.1.0 && git push origin v0.1.0`.
+# Trigger: a semver tag, normally created by `pnpm release <patch|minor|major>` (release-it).
 # The tag must equal packages/system1/package.json `version` (prefixed with `v`).
 # Pre-release tags (v1.2.0-beta.1) publish under the `next` dist-tag.
 #
@@ -67,7 +67,7 @@ jobs:
           set -euo pipefail
           V="${{ steps.version.outputs.version }}"
           awk -v v="$V" '
-            /^## / { if (found) exit; if (index($0, "## " v) == 1) { found=1; next } }
+            /^## / { if (found) exit; if (index($0, "## [" v "]") == 1) { found=1; next } }
             found { print }
           ' CHANGELOG.md > release-notes.md
           if [ ! -s release-notes.md ]; then echo "No CHANGELOG entry for $V" > release-notes.md; fi
