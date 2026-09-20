@@ -10,7 +10,7 @@ Date: 2026-09-19
 
 - Add `LocalModel = { id, model, capabilities, evaluate(request) => DecodedEvaluation | Promise }` to the adapter SPI. `Model = ModelProtocol | LocalModel`; discriminated by the presence of `evaluate`.
 - `createClient({ model })` and `layer(model)` accept `Model`. For a `LocalModel` the runtime skips transport but still runs `prepare` (capability check, freezing) and `validateResult`. `layer` is overloaded so a `LocalModel` layer has no `HttpClient` requirement.
-- New entry `system-one/testing` exports `stubModel(options)`: static `answers` or dynamic `respond(request)`, optional `capabilities`/`resolvedModel`/`usage`, records `calls`, `reset()`. Default capabilities advertise probabilities but not confidence, because an advertised field is mandatory in every answer.
+- New entry `system-one/testing` exports `stubModel(options)`: static `answers` or dynamic `respond(request)` (exactly one), optionally typed against `questions` via `Answers<Q>` so stub mistakes are compile errors, optional `capabilities`/`resolvedModel`/`usage`, records `calls`, `reset()`. Default capabilities advertise probabilities but not confidence, because an advertised field is mandatory in every answer.
 - `testLayer` stays as a deprecated wrapper over `layer(localModel)`.
 
 ## Consequences

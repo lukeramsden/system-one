@@ -6,7 +6,7 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 
 ### Added
 
-- `system-one/testing`: `stubModel({ answers | respond, capabilities?, resolvedModel?, usage? })` returning a `LocalModel` with recorded `calls`; `stubCapabilities` and `fullCapabilities` presets.
+- `system-one/testing`: `stubModel({ questions?, answers | respond, capabilities?, resolvedModel?, usage? })` returning a `LocalModel` with recorded `calls`; passing `questions` types the answers against the question set; `stubCapabilities` and `fullCapabilities` presets.
 - `LocalModel` (`{ id, model, capabilities, evaluate(request) }`) accepted by `createClient({ model })` and `layer(model)` alongside `ModelProtocol`. `layer(localModel)` requires no `HttpClient`.
 
 ### Deprecated

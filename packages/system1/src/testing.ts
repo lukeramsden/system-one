@@ -1,4 +1,11 @@
-import type { Capabilities, DecodedEvaluation, EvaluationRequest, Usage } from "./core.js";
+import type {
+  Answers,
+  Capabilities,
+  DecodedEvaluation,
+  EvaluationRequest,
+  Questions,
+  Usage,
+} from "./core.js";
 import type { LocalModel } from "./adapter.js";
 
 export type { LocalModel } from "./adapter.js";
@@ -38,15 +45,19 @@ interface StubBase {
   readonly resolvedModel?: string;
   readonly usage?: Usage;
 }
-export interface StaticStubOptions extends StubBase {
-  /** Fixed answers for every request. */
-  readonly answers: StubAnswers;
+/** Typed stub: `questions` makes wrong keys, kinds, or choice values a compile error. */
+export interface TypedStubOptions<Q extends Questions> extends StubBase {
+  readonly questions: Q;
+  readonly answers?: Answers<Q>;
+  /** Compute answers from the prepared request. May throw `System1Error`. */
+  readonly respond?: (request: EvaluationRequest<Q>) => Answers<Q> | Promise<Answers<Q>>;
 }
-export interface DynamicStubOptions extends StubBase {
-  /** Compute answers from the prepared request (e.g. switch on state). May throw `System1Error`. */
-  readonly respond: (request: EvaluationRequest) => StubAnswers | Promise<StubAnswers>;
+/** Untyped stub: answers are only checked at runtime. */
+export interface UntypedStubOptions extends StubBase {
+  readonly questions?: undefined;
+  readonly answers?: StubAnswers;
+  readonly respond?: (request: EvaluationRequest) => StubAnswers | Promise<StubAnswers>;
 }
-export type StubOptions = StaticStubOptions | DynamicStubOptions;
 
 export interface StubModel extends LocalModel {
   /** Every prepared request this stub has received, oldest first. */
@@ -62,9 +73,16 @@ export interface StubModel extends LocalModel {
  *
  * Throw a `System1Error` from `respond` to simulate a documented provider failure.
  */
-export function stubModel(options: StubOptions): StubModel {
+export function stubModel<const Q extends Questions>(options: TypedStubOptions<Q>): StubModel;
+export function stubModel(options: UntypedStubOptions): StubModel;
+export function stubModel(options: TypedStubOptions<Questions> | UntypedStubOptions): StubModel {
+  if ((options.answers === undefined) === (options.respond === undefined))
+    throw new TypeError("stubModel: provide exactly one of `answers` or `respond`");
+  const respond: (request: EvaluationRequest) => unknown =
+    options.respond !== undefined
+      ? (options.respond as (request: EvaluationRequest) => unknown)
+      : () => options.answers;
   const calls: EvaluationRequest[] = [];
-  const respond = "respond" in options ? options.respond : (): StubAnswers => options.answers;
   return {
     id: options.id ?? "stub",
     model: options.model ?? "stub-1",

@@ -15,6 +15,36 @@ const answers = {
 } as const;
 
 describe("stubModel", () => {
+  it("is typed against the question set when questions are supplied", () => {
+    stubModel({ questions, answers });
+    // @ts-expect-error unknown key
+    stubModel({
+      questions,
+      answers: { ...answers, extra: { kind: "boolean", probabilityTrue: 1 } },
+    });
+    // @ts-expect-error missing key
+    stubModel({ questions, answers: { urgent: answers.urgent } });
+    // @ts-expect-error undeclared choice value
+    stubModel({ questions, answers: { ...answers, dept: { kind: "choice", value: "zzz" } } });
+    // @ts-expect-error wrong kind for this key
+    stubModel({
+      questions,
+      answers: { ...answers, urgent: { kind: "ordinal", selectedIndex: 0 } },
+    });
+    stubModel({
+      questions,
+      respond: (request) => {
+        const state: unknown = request.state;
+        void state;
+        return {
+          ...answers,
+          dept: { kind: "choice", value: "b", probabilities: { a: 0.3, b: 0.7 } },
+        };
+      },
+    });
+    expect(true).toBe(true);
+  });
+
   it("serves the Promise client without HTTP and records calls", async () => {
     const stub = stubModel({ answers, resolvedModel: "stub-1.0", usage: { inputTokens: 3 } });
     const client = createClient({

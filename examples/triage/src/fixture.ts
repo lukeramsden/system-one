@@ -1,7 +1,9 @@
 import { stubModel, fullCapabilities } from "system-one/testing";
+import { triage } from "./questions.ts";
 
 /** In-memory stand-in for a real model. Replace with jev(), cloudflare(), or laya(). */
 export const fixtureModel = stubModel({
+  questions: triage,
   id: "fixture",
   model: "fixture-1",
   resolvedModel: "fixture-1.0.0",

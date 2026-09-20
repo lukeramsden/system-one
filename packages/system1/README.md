@@ -100,6 +100,7 @@ Lazy and interruptible; `System1Error` in the error channel; any `HttpClient` ca
 import { stubModel } from "system-one/testing";
 
 const model = stubModel({
+  questions: triage, // types `answers` — wrong keys, kinds, or choice values fail to compile
   answers: {
     urgent: { kind: "boolean", probabilityTrue: 0.93 },
     department: {
@@ -116,7 +117,7 @@ layer(model); // Effect — no HttpClient needed
 model.calls; // every request received, for assertions
 ```
 
-Use `respond: (request) => answers` to vary answers by state, or throw a `System1Error` to simulate rate limits and quota failures. Full validation still runs, so a stub cannot return a shape the real model couldn't. Any object with `capabilities` and `evaluate(request)` (a `LocalModel`) is accepted the same way — handy for embedded models.
+Use `respond: (request) => answers` instead of `answers` to vary by state, or throw a `System1Error` to simulate rate limits and quota failures. Full validation still runs, so a stub cannot return a shape the real model couldn't. Any object with `capabilities` and `evaluate(request)` (a `LocalModel`) is accepted the same way — handy for embedded models.
 
 ## Adapters
 
