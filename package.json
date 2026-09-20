@@ -2,8 +2,6 @@
   "name": "system1-workspace",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@12.4.2",
-  "engines": { "node": ">=22.18.0" },
   "scripts": {
     "build": "pnpm --filter system1 build",
     "test": "vp test run",
@@ -19,5 +17,9 @@
     "effect": "3.22.2",
     "typescript": "~5.9.3",
     "vite-plus": "0.3.3"
-  }
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "packageManager": "pnpm@12.4.2"
 }
