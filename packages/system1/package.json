@@ -65,7 +65,7 @@
   },
   "scripts": {
     "build": "vp pack",
-    "prepack": "vp pack"
+    "prepack": "vp pack && cp ../../README.md README.md"
   },
   "peerDependencies": {
     "@effect/platform": "^0.97.2",
