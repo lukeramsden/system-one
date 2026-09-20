@@ -1,0 +1,13 @@
+{
+  "name": "triage-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/main.ts"
+  },
+  "dependencies": {
+    "@effect/platform": "0.97.2",
+    "effect": "3.22.2",
+    "system1": "workspace:*"
+  }
+}

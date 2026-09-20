@@ -182,6 +182,18 @@ importers:
         specifier: 0.3.3
         version: 0.3.3(@types/node@22.20.3)(typescript@5.9.3)
 
+  examples/triage:
+    dependencies:
+      '@effect/platform':
+        specifier: 0.97.2
+        version: 0.97.2(effect@3.22.2)
+      effect:
+        specifier: 3.22.2
+        version: 3.22.2
+      system1:
+        specifier: workspace:*
+        version: link:../../packages/system1
+
   packages/system1:
     dependencies:
       '@effect/platform':

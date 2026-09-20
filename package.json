@@ -8,8 +8,9 @@
     "typecheck": "tsc --noEmit",
     "check": "vp check",
     "format": "vp fmt",
-    "verify": "pnpm check && pnpm typecheck && pnpm test && pnpm build && pnpm smoke",
-    "smoke": "node scripts/smoke.mjs"
+    "verify": "pnpm check && pnpm typecheck && pnpm test && pnpm build && pnpm example && pnpm smoke",
+    "smoke": "node scripts/smoke.mjs",
+    "example": "pnpm -F triage-example start"
   },
   "devDependencies": {
     "@effect/platform": "0.97.2",
