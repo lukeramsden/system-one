@@ -1,6 +1,7 @@
 import { prepare, validateResult } from "./core.js";
 import type { EvaluationRequest, EvaluationResult, Questions, Requirements } from "./core.js";
-import type { ModelProtocol } from "./adapter.js";
+import { isLocalModel } from "./adapter.js";
+import type { Model } from "./adapter.js";
 import { System1Error } from "./errors.js";
 
 export interface ExecutionOptions {
@@ -16,7 +17,7 @@ export interface Client {
 
 /** One attempt per evaluation. No hidden retries, redirects, or model fallback. */
 export function createClient(config: {
-  readonly model: ModelProtocol;
+  readonly model: Model;
   readonly fetch?: typeof globalThis.fetch;
 }): Client {
   const transport = config.fetch ?? globalThis.fetch;
@@ -34,6 +35,12 @@ export function createClient(config: {
       const signals = [options.signal, timeout].filter((s): s is AbortSignal => s !== undefined);
       const signal = signals.length ? AbortSignal.any(signals) : undefined;
       signal?.throwIfAborted();
+      const identity = { adapter: model.id, model: model.model };
+      if (isLocalModel(model)) {
+        const decoded = await model.evaluate(prepared);
+        signal?.throwIfAborted();
+        return validateResult(prepared, decoded, identity, model.capabilities);
+      }
       const encoded = model.encode(prepared);
       let response: Response;
       let text: string;
@@ -64,12 +71,7 @@ export function createClient(config: {
         { status: response.status, headers: Object.fromEntries(response.headers), body },
         prepared,
       );
-      return validateResult(
-        prepared,
-        decoded,
-        { adapter: model.id, model: model.model },
-        model.capabilities,
-      );
+      return validateResult(prepared, decoded, identity, model.capabilities);
     },
   };
 }

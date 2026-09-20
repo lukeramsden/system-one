@@ -213,11 +213,12 @@ export interface EvaluationResult<Q extends Questions, R extends Requirements = 
     readonly resolvedModel?: string;
   };
   readonly requestId?: string;
-  readonly usage?: {
-    readonly inputTokens?: number;
-    readonly outputTokens?: number;
-    readonly totalTokens?: number;
-  };
+  readonly usage?: Usage;
+}
+export interface Usage {
+  readonly inputTokens?: number;
+  readonly outputTokens?: number;
+  readonly totalTokens?: number;
 }
 export interface KindCapability {
   readonly probabilities: boolean;

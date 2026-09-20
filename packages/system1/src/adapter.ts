@@ -23,6 +23,21 @@ export interface ModelProtocol {
   encode(request: EvaluationRequest): PreparedRequest;
   decode(response: ReceivedResponse, request: EvaluationRequest): DecodedEvaluation;
 }
+/**
+ * A model answered in-process (stubs, fixtures, embedded models). No HTTP is involved,
+ * but the same request preparation and result validation run as for ModelProtocol.
+ */
+export interface LocalModel {
+  readonly id: string;
+  readonly model: string;
+  readonly capabilities: Capabilities;
+  evaluate(request: EvaluationRequest): DecodedEvaluation | Promise<DecodedEvaluation>;
+}
+/** Anything a runtime can evaluate against. */
+export type Model = ModelProtocol | LocalModel;
+export function isLocalModel(model: Model): model is LocalModel {
+  return typeof (model as LocalModel).evaluate === "function";
+}
 export function defineAdapter(protocol: ModelProtocol): ModelProtocol {
   if (!protocol.id.trim() || !protocol.model.trim())
     throw new System1Error("InvalidRequest", "Adapter and model identifiers are required");

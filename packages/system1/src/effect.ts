@@ -9,7 +9,8 @@ import type {
   DecodedEvaluation,
   Capabilities,
 } from "./core.js";
-import type { ModelProtocol } from "./adapter.js";
+import { isLocalModel } from "./adapter.js";
+import type { LocalModel, Model, ModelProtocol } from "./adapter.js";
 import { isSystem1Error, System1Error } from "./errors.js";
 
 export interface System1Service {
@@ -30,8 +31,56 @@ function attempt<A>(thunk: () => A): Effect.Effect<A, System1Error> {
   });
 }
 
-/** Supply any protocol with an injectable Effect HttpClient. No nested runtime or Promise wrapper. */
-export function layer(model: ModelProtocol): Layer.Layer<System1, never, HttpClient.HttpClient> {
+function localService(model: LocalModel): System1Service {
+  return System1.of({
+    evaluate: (request) =>
+      Effect.gen(function* () {
+        const prepared = yield* attempt(() => prepare(request, model.capabilities));
+        const decoded = yield* Effect.suspend(() => {
+          try {
+            const out = model.evaluate(prepared);
+            return out instanceof Promise
+              ? Effect.tryPromise({
+                  try: () => out,
+                  catch: (error) => error,
+                }).pipe(
+                  Effect.catchAll((error) =>
+                    isSystem1Error(error) ? Effect.fail(error) : Effect.die(error),
+                  ),
+                )
+              : Effect.succeed(out);
+          } catch (error) {
+            return isSystem1Error(error) ? Effect.fail(error) : Effect.die(error);
+          }
+        });
+        return yield* attempt(() =>
+          validateResult(
+            prepared,
+            decoded,
+            { adapter: model.id, model: model.model },
+            model.capabilities,
+          ),
+        );
+      }).pipe(
+        Effect.withSpan("system1.evaluate", {
+          attributes: { "system1.adapter": model.id, "system1.model": model.model },
+        }),
+      ),
+  });
+}
+
+/**
+ * Supply a model. HTTP protocols need an injectable Effect HttpClient; local models
+ * (stubs from `system-one/testing`, embedded models) need nothing.
+ */
+export function layer(model: LocalModel): Layer.Layer<System1>;
+export function layer(model: ModelProtocol): Layer.Layer<System1, never, HttpClient.HttpClient>;
+export function layer(model: Model): Layer.Layer<System1, never, HttpClient.HttpClient> {
+  if (isLocalModel(model)) return Layer.succeed(System1, localService(model));
+  return protocolLayer(model);
+}
+
+function protocolLayer(model: ModelProtocol): Layer.Layer<System1, never, HttpClient.HttpClient> {
   return Layer.effect(
     System1,
     Effect.gen(function* () {
@@ -81,24 +130,15 @@ export function layer(model: ModelProtocol): Layer.Layer<System1, never, HttpCli
   );
 }
 
-/** Fixture callbacks return untrusted normalized data; validation remains active. */
+/** @deprecated Use `layer(stubModel({ ... }))` from `system-one/testing`. */
 export function testLayer(options: {
   readonly capabilities: Capabilities;
   readonly evaluate: (request: EvaluationRequest) => DecodedEvaluation;
 }): Layer.Layer<System1> {
-  return Layer.succeed(
-    System1,
-    System1.of({
-      evaluate: (request) =>
-        attempt(() => {
-          const prepared = prepare(request, options.capabilities);
-          return validateResult(
-            prepared,
-            options.evaluate(prepared),
-            { adapter: "test", model: "fixture" },
-            options.capabilities,
-          );
-        }),
-    }),
-  );
+  return layer({
+    id: "test",
+    model: "fixture",
+    capabilities: options.capabilities,
+    evaluate: options.evaluate,
+  });
 }
