@@ -1,6 +1,6 @@
 # Writing an adapter
 
-An adapter teaches `system-one` how to talk to one model over one HTTP request. It is a plain object implementing `ModelProtocol` from `system-one/adapter`. It does **no I/O** — the Promise client and the Effect layer own transport, cancellation, and timeouts, and both run the same core validation after your `decode`.
+An adapter teaches `system-one` how to talk to one model over one HTTP request. (If your model runs in-process — a stub, a fixture, or an embedded model — you do not need an adapter: implement `LocalModel` from `system-one/adapter`, or use `stubModel` from `system-one/testing`.) It is a plain object implementing `ModelProtocol` from `system-one/adapter`. It does **no I/O** — the Promise client and the Effect layer own transport, cancellation, and timeouts, and both run the same core validation after your `decode`.
 
 Every snippet below is compiled from [`docs/snippets.ts`](./snippets.ts) so it cannot drift from the API.
 

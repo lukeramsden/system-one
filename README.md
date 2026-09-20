@@ -90,7 +90,33 @@ const program = Effect.gen(function* () {
 program.pipe(Effect.provide(layer(jev({ apiKey: "…" }))), Effect.provide(FetchHttpClient.layer));
 ```
 
-Lazy and interruptible; `System1Error` in the error channel; any `HttpClient` can be injected. `testLayer({ capabilities, evaluate })` provides fixtures with full validation.
+Lazy and interruptible; `System1Error` in the error channel; any `HttpClient` can be injected.
+
+## Testing
+
+`system-one/testing` gives you an in-process model that works in both runtimes — no HTTP, no fake `fetch`:
+
+```ts
+import { stubModel } from "system-one/testing";
+
+const model = stubModel({
+  answers: {
+    urgent: { kind: "boolean", probabilityTrue: 0.93 },
+    department: {
+      kind: "choice",
+      value: "billing",
+      probabilities: { billing: 0.9, technical: 0.1, sales: 0 },
+    },
+    frustration: { kind: "ordinal", probabilities: [0.1, 0.8, 0.1] },
+  },
+});
+
+createClient({ model }); // Promise
+layer(model); // Effect — no HttpClient needed
+model.calls; // every request received, for assertions
+```
+
+Use `respond: (request) => answers` to vary answers by state, or throw a `System1Error` to simulate rate limits and quota failures. Full validation still runs, so a stub cannot return a shape the real model couldn't. Any object with `capabilities` and `evaluate(request)` (a `LocalModel`) is accepted the same way — handy for embedded models.
 
 ## Adapters
 
